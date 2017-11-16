@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  spark-master:
+    image: 'milesg/sparkbase:latest'
+    build:
+      dockerfile: 'SparkBase-Dockerfile'
+      context: .
+    ports:
+      # Web UI
+      - '8080:8080'
+    command: ['bash', '-c', '/opt/spark-2.2.0-bin-hadoop2.7/bin/spark-class org.apache.spark.deploy.master.Master']
+
+  spark-worker1:
+    image: 'milesg/sparkbase:latest'
+    depends_on:
+      - 'spark-master'
+    command: ['bash', '-c', '/opt/spark-2.2.0-bin-hadoop2.7/bin/spark-class org.apache.spark.deploy.worker.Worker spark-master:7077']

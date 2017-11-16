@@ -1,0 +1,20 @@
+FROM ubuntu:16.04
+
+COPY ./spark-2.2.0-bin-hadoop2.7.tgz /tmp
+
+RUN apt update && apt install -y \
+    default-jre \
+    python3-dev \
+    python3-setuptools \
+    python3-pip
+
+RUN tar -xvzf /tmp/spark-2.2.0-bin-hadoop2.7.tgz -C /opt \
+    && rm /tmp/spark-2.2.0-bin-hadoop2.7.tgz
+
+ENV SPARK_HOME /opt/spark-2.2.0-bin-hadoop2.7
+ENV PATH $PATH:$SPARK_HOME
+
+RUN ln -s /usr/bin/python3 /usr/bin/python
+RUN ln -s /usr/bin/pip3 /usr/bin/pip
+
+RUN pip install --upgrade pip pyspark
